@@ -74,7 +74,7 @@ class App extends Component {
           <SearchBar updateSearchQuery={this.updateSearchQuery}/>
         </div>
         <div className='flex-column'>
-          <div className='sidebar'><SideBar /></div>
+          <div className='sidebar'><SideBar cuisines={this.state.cuisineTypes}/></div>
           <div className='result-list'><ResultList results={this.state.searchResults} /></div>
         </div>
       </div>

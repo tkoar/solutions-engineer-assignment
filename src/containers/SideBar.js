@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-
+import CuisineType from '../components/CuisineType'
 class SideBar extends Component {
 
   render() {
     return (
       <div>
-        {"I am the sidebar!"}
+        <CuisineType cuisines={this.props.cuisines}/>
       </div>
     )
   }
