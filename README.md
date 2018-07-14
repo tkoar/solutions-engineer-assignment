@@ -1,0 +1,1 @@
+# Algolia - Solutions Engineering Assignment
