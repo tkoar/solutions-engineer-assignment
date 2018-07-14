@@ -12,10 +12,8 @@ class ResultsList extends Component {
 
   render() {
     return (
-      <div>
-        <div>
-          {this.makeResults()}
-        </div>
+      <div className='result-list'>
+        {this.makeResults()}
       </div>
     )
   }

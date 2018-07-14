@@ -2,8 +2,9 @@ import React, { Component } from 'react'
 import SearchBar from './components/SearchBar'
 import SideBar from './containers/SideBar'
 import ResultList from './containers/ResultList'
-import {index, helper} from './resources/SearchTools'
+import {index, index_name, client, helper} from './resources/SearchTools'
 import './App.css'
+const algoliasearchHelper = require('algoliasearch-helper')
 
 class App extends Component {
 
@@ -12,6 +13,7 @@ class App extends Component {
     searchResults: [],
     searchCount: undefined,
     searchTime: undefined,
+    currentCuisine: undefined,
     cuisineTypes: []
   }
 
@@ -19,7 +21,26 @@ class App extends Component {
     this.setState({searchQuery: searchQuery}, () => this.updateSearch(searchQuery))
   }
 
-  updateStateWithSearchResults = () => {
+  updateCuisine = (cuisine) => {
+    if (cuisine) {
+      this.setState({currentCuisine: cuisine.name}, () => this.updateSearch())
+    } else {
+      this.setState({currentCuisine: null}, () => this.updateSearch())
+    }
+  }
+
+  updateSearch = () => {
+    const helper = algoliasearchHelper(client, index_name, {facets: ["food_type"]})
+    if (this.state.currentCuisine) {
+      helper.setQuery(this.state.query)
+      helper.addFacetRefinement("food_type", this.state.currentCuisine).search()
+    } else {
+      helper.setQuery(this.state.searchQuery).search()
+    }
+    this.updateStateWithSearchResults(helper)
+  }
+
+  updateStateWithSearchResults = (helper) => {
     helper.on("result", (content) => {
       this.setState({
         searchResults: content.hits,
@@ -28,11 +49,6 @@ class App extends Component {
         cuisineTypes: content.getFacetValues("food_type"),
       })
     })
-  }
-
-  updateSearch = () => {
-    helper.setQuery(this.state.searchQuery).search()
-    this.updateStateWithSearchResults()
   }
 
   handleSuccessError = (error, content, action) => {
@@ -62,20 +78,20 @@ class App extends Component {
 
   componentDidMount() {
     this.setIndex()
+    const helper = algoliasearchHelper(client, index_name, {facets: ["food_type"]})
     helper.search(this.state.searchQuery)
-    this.updateStateWithSearchResults()
+    this.updateStateWithSearchResults(helper)
   }
-
 
   render() {
     return (
       <div className="App flex-row">
-        <div className="flex-row">
+        <div>
           <SearchBar updateSearchQuery={this.updateSearchQuery}/>
         </div>
         <div className='flex-column'>
-          <div className='sidebar'><SideBar cuisines={this.state.cuisineTypes}/></div>
-          <div className='result-list'><ResultList results={this.state.searchResults} /></div>
+          <SideBar cuisines={this.state.cuisineTypes} updateCuisine={this.updateCuisine}/>
+          <ResultList results={this.state.searchResults} />
         </div>
       </div>
     );

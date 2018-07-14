@@ -4,8 +4,8 @@ class SideBar extends Component {
 
   render() {
     return (
-      <div>
-        <CuisineType cuisines={this.props.cuisines}/>
+      <div className='sidebar' >
+        <CuisineType cuisines={this.props.cuisines} updateCuisine={this.props.updateCuisine}/>
       </div>
     )
   }

@@ -32,10 +32,13 @@
   flex-direction: row;
   flex-wrap: wrap;
   width: 100%;
+  align-content: left;
+  justify-content: left;
 }
 
 .sidebar {
   width: 30%;
+  background-color: white;
 }
 
 .result-list {
@@ -44,7 +47,6 @@
 
 .search {
   display: flex;
-  padding: 1vw;
   width: 100%;
   align-content: center;
   justify-content: center;
@@ -146,10 +148,10 @@ input {
 }
 
 .filter-type:hover, .filter-type:active {
-  padding: .3vw;
+  padding: .1vw;
   background-color: teal;
   color: white;
-  font-weight: bolder;
+  font-weight: bold;
   border-radius: 1vw;
 }
 
