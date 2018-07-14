@@ -1,28 +1,132 @@
 .App {
   text-align: center;
+  padding-top: 7vw;
+  padding-right: 10vw;
+  padding-left: 10vw;
+  padding-bottom: 7vw;
+  background-image: url("resources/graphics/background_@2X.png");
+  background-repeat: repeat;
+  font-family: 'Gill Sans', 'Gill Sans MT', 'Calibri', 'Trebuchet MS', sans-serif;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+.App>* {
+  flex-basis: 100%;
 }
 
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: center;
 }
 
-.App-title {
-  font-size: 1.5em;
+.flex-column {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
 }
 
-.App-intro {
-  font-size: large;
+.sidebar {
+  width: 30%;
 }
 
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.result-list {
+  width: 70%;
+}
+
+.search {
+  display: flex;
+  padding: 1vw;
+  width: 100%;
+  align-content: center;
+  justify-content: center;
+  background-color: teal;
+}
+
+input {
+  border-radius: .5vw;
+  font-size: 1.5vw;
+  margin: 3vw;
+  min-width: 80vw;
+  height: 4vw;
+  box-sizing: border-box;
+  border: none;
+  align-self: center;
+}
+
+.result-list {
+  background-color: white;
+}
+
+.result-img {
+  width: 10vw;
+  height: 10vw;
+  border-radius: 1vw;
+  margin: 2vw;
+}
+
+.result {
+  margin: 1vw;
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: nowrap;
+}
+
+.result:hover, .result:active {
+  box-shadow: .25vw .25vw .15vw teal;
+  font-weight: bolder;
+  border-radius: 1vw;
+}
+
+.result-title {
+  display: flex;
+  flex-flow: row;
+  flex-wrap: wrap;
+  text-align: left;
+  position: relative;
+  padding-top: 2vw;
+  font-size: 2vw;
+}
+
+.result-stars-count {
+  display: flex;
+  flex-flow: row nowrap;
+  height: 100%;
+  color: #F8B99C;
+  padding-top: 1vw;
+}
+
+.star-container {
+  display: flex;
+  margin-left: 1vw;
+  margin-right: 1vw;
+  align-items: center;
+  justify-content: left;
+}
+
+.result-rating {
+  font-size: 1.75vw;
+  display: flex;
+  flex-flow: column wrap;
+  height: 100%;
+  align-items: left;
+  margin-top: 1vw;
+}
+
+.star {
+  height: 1.75vw;
+  width: 1.75vw;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.light-text {
+  font-size: 1.75vw;
+  color: lightgrey;
+}
+
+.result-description {
+  padding-top: 1vw;
 }

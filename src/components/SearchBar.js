@@ -21,11 +21,10 @@ class SearchBar extends Component {
 
   render() {
     return (
-      <div>
+      <div className='search'>
         <form onSubmit={this.handleSubmit.bind(this)}>
           <input
             onChange={this.handleSearchChange.bind(this)}
-            className='search-input'
             type="text"
             name="searchQuery"
             placeholder={"Search for Restaurants by Name, Cuisine, Location"}

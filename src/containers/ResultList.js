@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import Result from '../components/Result'
+const cuid = require('cuid');
 
 class ResultsList extends Component {
 
   makeResults() {
     return this.props.results.map((result, index) => {
-      return <Result />
+      return <Result key={cuid()} {...result}/>
     })
   }
 

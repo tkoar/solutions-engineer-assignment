@@ -4,7 +4,7 @@ class SideBar extends Component {
 
   render() {
     return (
-      <div className='sidebar'>
+      <div>
         {"I am the sidebar!"}
       </div>
     )
