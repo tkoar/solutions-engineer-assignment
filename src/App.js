@@ -14,6 +14,7 @@ class App extends Component {
     searchCount: undefined,
     searchTime: undefined,
     currentCuisine: undefined,
+    minRating: undefined,
     cuisineTypes: []
   }
 
@@ -42,12 +43,21 @@ class App extends Component {
 
   updateStateWithSearchResults = (helper) => {
     helper.on("result", (content) => {
-      this.setState({
-        searchResults: content.hits,
-        searchCount: content.nbHits,
-        searchTime: content.processingTimeMS,
-        cuisineTypes: content.getFacetValues("food_type"),
-      })
+      if (this.state.minRating) {
+        this.setState({
+          searchResults: this.filterResultsBasedOnRating(content.hits),
+          searchCount: content.nbHits,
+          searchTime: content.processingTimeMS,
+          cuisineTypes: content.getFacetValues("food_type")
+        })
+      } else {
+        this.setState({
+          searchResults: content.hits,
+          searchCount: content.nbHits,
+          searchTime: content.processingTimeMS,
+          cuisineTypes: content.getFacetValues("food_type")
+        })
+      }
     })
   }
 
@@ -58,6 +68,17 @@ class App extends Component {
     } else {
       console.log("Success " + action + "!", content)
     }
+  }
+
+  updateBasedOnRating = (rating) => {
+    this.setState({minRating: rating}, () => this.updateSearch())
+  }
+
+  filterResultsBasedOnRating = (searchResults) => {
+    const filteredResults = searchResults.filter((restaurant, idx) => {
+      return Math.round(parseFloat(restaurant.stars_count)) >= parseInt(this.state.minRating)
+    })
+    return filteredResults
   }
 
   setIndex() {
@@ -78,20 +99,26 @@ class App extends Component {
 
   componentDidMount() {
     this.setIndex()
-    const helper = algoliasearchHelper(client, index_name, {facets: ["food_type"]})
-    helper.search(this.state.searchQuery)
-    this.updateStateWithSearchResults(helper)
+    this.updateSearch()
   }
 
   render() {
     return (
       <div className="App flex-row">
         <div>
-          <SearchBar updateSearchQuery={this.updateSearchQuery}/>
+          <SearchBar
+            updateSearchQuery={this.updateSearchQuery}
+          />
         </div>
         <div className='flex-column'>
-          <SideBar cuisines={this.state.cuisineTypes} updateCuisine={this.updateCuisine}/>
-          <ResultList results={this.state.searchResults} />
+          <SideBar
+            cuisines={this.state.cuisineTypes}
+            updateCuisine={this.updateCuisine}
+            updateBasedOnRating={this.updateBasedOnRating}
+          />
+          <ResultList
+            results={this.state.searchResults}
+          />
         </div>
       </div>
     );
