@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+const cuid = require('cuid');
 
 class CuisineType extends Component {
 
@@ -20,9 +21,13 @@ class CuisineType extends Component {
     let cuisines = this.props.cuisines.slice(0, 7)
     return cuisines.map(cuisine => {
       return (
-        <div className={this.state.cuisine === cuisine.name ? "flex-column cursor filter-type active shadow" : "flex-column cursor filter-type"} onClick={(event) => this.updateSelectedCuisine(event, cuisine)}>
-          <div className='cuisine-name'>{cuisine.name}</div>
-          <div className="flex-column cursor filter-type light-text">{cuisine.count}</div>
+        <div
+          key={cuid()}
+          className={this.state.cuisine === cuisine.name ? "flex-column cursor filter-type active shadow" : "flex-column cursor filter-type"}
+          onClick={(event) => this.updateSelectedCuisine(event, cuisine)}
+          >
+          <div key={cuid()} className='cuisine-name'>{cuisine.name}</div>
+          <div key={cuid()} className="flex-column cursor filter-type light-text">{cuisine.count}</div>
         </div>
       )
     })
@@ -32,7 +37,7 @@ class CuisineType extends Component {
     return (
       <div>
         <div className='title'>{"Cuisine/Food Type"}</div>
-        <div className='flex-column' style={{'font-size': '1.75rem'}}>
+        <div className='flex-column' style={{fontSize: '1.75rem'}}>
           {this.makeListOfCuisines()}
         </div>
       </div>

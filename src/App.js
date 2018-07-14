@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import SearchBar from './components/SearchBar'
 import SideBar from './containers/SideBar'
 import ResultList from './containers/ResultList'
-import {index, index_name, client, helper} from './resources/SearchTools'
+import {index, index_name, client} from './resources/SearchTools'
 import './App.css'
 const algoliasearchHelper = require('algoliasearch-helper')
 
@@ -19,7 +19,7 @@ class App extends Component {
   }
 
   updateSearchQuery = (searchQuery) => {
-    this.setState({searchQuery: searchQuery}, () => this.updateSearch(searchQuery))
+    this.setState({searchQuery: searchQuery}, () => this.updateSearch())
   }
 
   updateCuisine = (cuisine) => {
@@ -33,7 +33,7 @@ class App extends Component {
   updateSearch = () => {
     const helper = algoliasearchHelper(client, index_name, {facets: ["food_type"]})
     if (this.state.currentCuisine) {
-      helper.setQuery(this.state.query)
+      helper.setQuery(this.state.searchQuery)
       helper.addFacetRefinement("food_type", this.state.currentCuisine).search()
     } else {
       helper.setQuery(this.state.searchQuery).search()
@@ -76,7 +76,7 @@ class App extends Component {
 
   filterResultsBasedOnRating = (searchResults) => {
     const filteredResults = searchResults.filter((restaurant, idx) => {
-      return Math.round(parseFloat(restaurant.stars_count)) >= parseInt(this.state.minRating)
+      return Math.round(parseFloat(restaurant.stars_count)) >= parseFloat(this.state.minRating)
     })
     return filteredResults
   }

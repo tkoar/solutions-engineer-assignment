@@ -32,6 +32,7 @@ class Rating extends Component {
       let empty_stars = this.addEmptyStars(5-num_stars)
       stars.push(
         <div
+          key={cuid()}
           className={this.state.rating === num_stars ? 'star-line active shadow' : 'star-line'}
           onClick={(event) => this.updateRating(event, num_stars)}
           data-rating={num_stars}>{[...full_stars, ...empty_stars]}

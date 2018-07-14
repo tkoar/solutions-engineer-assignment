@@ -1,5 +1,4 @@
 const algoliasearch = require('algoliasearch')
-const algoliasearchHelper = require('algoliasearch-helper')
 const APP_ID = 'ZPSJDZC155'
 const API_KEY = 'bd36c8d32cbc75d68d3983859bc8010c'
 const index_name = 'open_table_restaurants'
