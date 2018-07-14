@@ -8,10 +8,31 @@ import './App.css'
 class App extends Component {
 
   state = {
+    searchQuery: "",
     searchResults: [],
     searchCount: undefined,
     searchTime: undefined,
     cuisineTypes: []
+  }
+
+  updateSearchQuery = (searchQuery) => {
+    this.setState({searchQuery: searchQuery}, () => this.updateSearch(searchQuery))
+  }
+
+  updateStateWithSearchResults = () => {
+    helper.on("result", (content) => {
+      this.setState({
+        searchResults: content.hits,
+        searchCount: content.nbHits,
+        searchTime: content.processingTimeMS,
+        cuisineTypes: content.getFacetValues("food_type"),
+      })
+    })
+  }
+
+  updateSearch = () => {
+    helper.setQuery(this.state.searchQuery).search()
+    this.updateStateWithSearchResults()
   }
 
   handleSuccessError = (error, content, action) => {
@@ -41,15 +62,8 @@ class App extends Component {
 
   componentDidMount() {
     this.setIndex()
-    helper.search(this.state.query)
-    helper.on("result", (content) => {
-      this.setState({
-        searchResults: content.hits,
-        searchCount: content.nbHits,
-        searchTime: content.processingTimeMS,
-        cuisineTypes: content.getFacetValues("food_type"),
-      })
-    })
+    helper.search(this.state.searchQuery)
+    this.updateStateWithSearchResults()
   }
 
 
@@ -57,7 +71,7 @@ class App extends Component {
     return (
       <div className="App flex-row">
         <div className="flex-row">
-          <SearchBar />
+          <SearchBar updateSearchQuery={this.updateSearchQuery}/>
         </div>
         <div className='flex-column'>
           <div className='sidebar'><SideBar /></div>

@@ -8,14 +8,19 @@ class SearchBar extends Component {
 
   handleSubmit(event) {
     event.preventDefault()
+    if(this.state.query){
+      this.props.updateSearchQuery(this.state.query)
+    }
   }
 
   handleSearchChange(event) {
     event.preventDefault()
     if (event.target.value.length < 1) {
       this.setState({ query: null })
+      this.props.updateSearchQuery("")
     } else {
       this.setState({ query: event.target.value })
+      this.props.updateSearchQuery(event.target.value)
     }
   }
 
