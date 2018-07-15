@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import SearchBar from './components/SearchBar'
 import SideBar from './containers/SideBar'
 import ResultList from './containers/ResultList'
+import Location from './components/Location'
 import {index, index_name, client} from './resources/SearchTools'
 import './App.css'
 const algoliasearchHelper = require('algoliasearch-helper')
@@ -9,6 +10,7 @@ const algoliasearchHelper = require('algoliasearch-helper')
 class App extends Component {
 
   state = {
+    userLocationAccepted: undefined,
     searchQuery: "",
     searchResults: [],
     searchCount: undefined,
@@ -105,19 +107,17 @@ class App extends Component {
     this.setState({paymentType: paymentType}, () => this.updateSearch())
   }
 
+  setLocation = (latitude, longitude) => {
+    this.setState({lat: latitude, lon: longitude})
+  }
 
   setIndex() {
     index.setSettings(
       {
         'attributesForFaceting': ['food_type'],
         'sortFacetValuesBy': 'count',
-        'searchableAttributes': [
-          "name",
-          "food_type",
-          "city",
-          "area",
-          "neighborhood"
-        ]
+        'searchableAttributes': ["name","food_type","city","area","neighborhood"],
+        ranking: ['typo','geo','words','attribute','proximity','exact','custom']
       }, (error, content) => this.handleSuccessError(error, content, "setting index settings")
     )
   }
@@ -134,6 +134,7 @@ class App extends Component {
           <SearchBar
             updateSearchQuery={this.updateSearchQuery}
           />
+          <Location setLocation={this.setLocation}/>
         </div>
         <div className='flex-column'>
           <SideBar
