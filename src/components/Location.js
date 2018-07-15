@@ -44,7 +44,7 @@ class Location extends Component {
           <input
             type='text'
             value={this.state.location}
-            placeholder={"Address, City, Zip..."}
+            placeholder={"Address, City, Zip, or Point of Interest..."}
             onChange={(event) => this.handleLocationChange(event)}
             >
           </input>

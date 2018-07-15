@@ -10,6 +10,8 @@ const algoliasearchHelper = require('algoliasearch-helper')
 class App extends Component {
 
   state = {
+    lat: undefined,
+    lng: undefined,
     userLocationAccepted: undefined,
     searchQuery: "",
     searchResults: [],
@@ -38,6 +40,12 @@ class App extends Component {
     if (this.state.currentCuisine) {
       helper.setQuery(this.state.searchQuery)
       helper.addFacetRefinement("food_type", this.state.currentCuisine).search()
+    }
+    if (this.state.lat && this.state.lng) {
+      helper.setQueryParameter('getRankingInfo', true)
+      helper.setQueryParameter('aroundLatLng',`${this.state.lat}, ${this.state.lng}`)
+      helper.setQueryParameter('aroundRadius', 7000)
+      helper.search()
     } else {
       helper.setQuery(this.state.searchQuery).search()
     }
@@ -107,18 +115,20 @@ class App extends Component {
     this.setState({paymentType: paymentType}, () => this.updateSearch())
   }
 
-  setLocation = (latitude, longitude) => {
-    this.setState({lat: latitude, lon: longitude})
+  setLocation = (coords) => {
+    this.setState({lat: coords.lat, lng: coords.lng}, () => this.updateSearch())
   }
 
   setIndex() {
+    let indexSettings = {
+      'attributesForFaceting': ['food_type'],
+      'sortFacetValuesBy': 'count',
+      'searchableAttributes': ["name","food_type","city","area","neighborhood"],
+      ranking: ['typo','geo','words','attribute','proximity','exact','custom']
+    }
     index.setSettings(
-      {
-        'attributesForFaceting': ['food_type'],
-        'sortFacetValuesBy': 'count',
-        'searchableAttributes': ["name","food_type","city","area","neighborhood"],
-        ranking: ['typo','geo','words','attribute','proximity','exact','custom']
-      }, (error, content) => this.handleSuccessError(error, content, "setting index settings")
+      indexSettings,
+      (error, content) => this.handleSuccessError(error, content, "setting index settings")
     )
   }
 
