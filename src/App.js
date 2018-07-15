@@ -15,6 +15,7 @@ class App extends Component {
     searchTime: undefined,
     currentCuisine: undefined,
     minRating: undefined,
+    paymentType: undefined,
     cuisineTypes: []
   }
 
@@ -43,21 +44,12 @@ class App extends Component {
 
   updateStateWithSearchResults = (helper) => {
     helper.on("result", (content) => {
-      if (this.state.minRating) {
-        this.setState({
-          searchResults: this.filterResultsBasedOnRating(content.hits),
-          searchCount: content.nbHits,
-          searchTime: content.processingTimeMS,
-          cuisineTypes: content.getFacetValues("food_type")
-        })
-      } else {
-        this.setState({
-          searchResults: content.hits,
-          searchCount: content.nbHits,
-          searchTime: content.processingTimeMS,
-          cuisineTypes: content.getFacetValues("food_type")
-        })
-      }
+      this.setState({
+        searchResults: this.filterResults(content.hits),
+        searchCount: content.nbHits,
+        searchTime: content.processingTimeMS,
+        cuisineTypes: content.getFacetValues("food_type")
+      })
     })
   }
 
@@ -80,6 +72,39 @@ class App extends Component {
     })
     return filteredResults
   }
+
+  filterResultsBasedPaymentType = (searchResults) => {
+    const altPayments = ["Diners Club", "Carte Blanche", "American Express"]
+    return searchResults.filter((restaurant, idx) => {
+      if (restaurant.payment_options.includes(this.state.paymentType)) {
+        return restaurant
+      } else if (altPayments.includes(this.state.paymentType)) {
+        if (restaurant.payment_options.includes("Discover")) {
+          return restaurant
+        }
+      }
+    })
+  }
+
+  filterResults = (searchResults) => {
+    if (this.state.minRating && this.state.paymentType) {
+      let filteredResults = []
+      filteredResults = this.filterResultsBasedOnRating(searchResults)
+      filteredResults = this.filterResultsBasedPaymentType(filteredResults)
+      return filteredResults
+    } else if (this.state.minRating) {
+      return this.filterResultsBasedOnRating(searchResults)
+    } else if (this.state.paymentType) {
+      return this.filterResultsBasedPaymentType(searchResults)
+    } else {
+      return searchResults
+    }
+  }
+
+  updatePaymentType = (paymentType) => {
+    this.setState({paymentType: paymentType}, () => this.updateSearch())
+  }
+
 
   setIndex() {
     index.setSettings(
@@ -115,6 +140,7 @@ class App extends Component {
             cuisines={this.state.cuisineTypes}
             updateCuisine={this.updateCuisine}
             updateBasedOnRating={this.updateBasedOnRating}
+            updatePaymentType={this.updatePaymentType}
           />
           <ResultList
             results={this.state.searchResults}

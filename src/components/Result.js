@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import GoldStar from './../resources/graphics/stars-plain.png'
 import EmptyStar from './../resources/graphics/star-empty.png'
-const cuid = require('cuid');
+const cuid = require('cuid')
 
 class Result extends Component {
 
