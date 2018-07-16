@@ -3,16 +3,16 @@ import React, { Component } from 'react'
 class Location extends Component {
 
   state = {
-    location: undefined,
+    location: "",
   }
 
   getLocation = (event) => {
     event.preventDefault()
-    if (!navigator.getLocation && this.state.location) {
+    if (!navigator.getLocation && this.state.location.length > 0) {
       this.geocodeAddress()
-    } else if (this.state.location) {
+    } else if (this.state.location.length > 0) {
       this.geocodeAddress()
-    } else if (!navigator.geolocation && !this.state.location) {
+    } else if (!navigator.geolocation && this.state.location < 1) {
       alert("Sorry your browser does not support geolocation, please manually input your current location to locate restaurants near your location")
     } else {
       navigator.geolocation.getCurrentPosition(position => {
@@ -33,25 +33,26 @@ class Location extends Component {
   }
 
   handleLocationChange = (event) => {
-    event.preventDefault()
     this.setState({location: event.target.value})
   }
 
   render() {
     return (
-      <div>
-        <form onSubmit={(event) => this.getLocation(event)}>
+      <div className='search'>
+        <form onSubmit={(event) => this.getLocation(event)} className="flex-row" style={{flexWrap: 'nowrap'}}>
           <input
             type='text'
             value={this.state.location}
             placeholder={"Address, City, Zip, or Point of Interest..."}
             onChange={(event) => this.handleLocationChange(event)}
+            style={{maxWidth: '49vw', minWidth: '49vw'}}
             >
           </input>
           <input
             type='submit'
             value={"Set Your Location"}
             onClick={(event) => this.getLocation(event)}
+            style={{maxWidth: '29vw', minWidth: '29vw', backgroundColor: 'lightgrey'}}
             >
           </input>
         </form>

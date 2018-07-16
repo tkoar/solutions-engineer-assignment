@@ -20,25 +20,23 @@ class PaymentType extends Component {
   makeListOfPayments() {
     let paymentTypes = ["AMEX", "Visa", "Discover", "MasterCard"]
     return (
-      <ul>
-        {paymentTypes.map(pt => (
-          <div
-            key={cuid()}
-            onClick={(event) => this.updateSelectedPayment(event, pt)}
-            className={this.state.paymentType === pt ? "filter-type active shadow" : "filter-type"}
-            >
-          {pt}
-          </div>)
-        )}
-      </ul>
+      paymentTypes.map(pt => (
+        <div
+          key={cuid()}
+          onClick={(event) => this.updateSelectedPayment(event, pt)}
+          className={this.state.paymentType === pt ? "filter-type active shadow" : "filter-type"}
+          >
+        {pt}
+        </div>)
+      )
     )
   }
 
   render() {
     return (
-      <div>
+      <div className='container'>
         <div className='title'>{"Payment Type"}</div>
-        <div className='cuisine-list' style={{fontSize: '1.75vw'}}>
+        <div className='container'>
           {this.makeListOfPayments()}
         </div>
       </div>

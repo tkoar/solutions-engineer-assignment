@@ -9,18 +9,20 @@ class Rating extends Component {
     rating: undefined
   }
 
-  addFullStars(num) {
+  addFullStars(num, spinning) {
+    let classList = spinning ? 'star rating-selected' : 'star'
     let stars = []
     for (var i = 0; i < num; i++) {
-      stars.push(<img key={cuid()} alt={"gold star"} src={GoldStar} className='star'></img>)
+      stars.push(<img key={cuid()} alt={"gold star"} src={GoldStar} className={classList}></img>)
     }
     return stars
   }
 
-  addEmptyStars(num) {
+  addEmptyStars(num, spinning) {
+    let classList = spinning ? 'star rating-selected' : 'star'
     let stars = []
     for (var i = 0; i < num; i++) {
-      stars.push(<img key={cuid()} alt={"empty star"} src={EmptyStar} className='star'></img>)
+      stars.push(<img key={cuid()} alt={"empty star"} src={EmptyStar} className={classList}></img>)
     }
     return stars
   }
@@ -28,12 +30,14 @@ class Rating extends Component {
   makeStars() {
     let stars = []
     for (let num_stars = 0; num_stars < 6; num_stars++) {
-      let full_stars = this.addFullStars(num_stars)
-      let empty_stars = this.addEmptyStars(5-num_stars)
+      let spinningStars = this.state.rating === num_stars ? 'rating-selected' : false
+      let full_stars = this.addFullStars(num_stars, spinningStars)
+      let empty_stars = this.addEmptyStars(5-num_stars, spinningStars)
+      let classList = 'flex-row container rating'
       stars.push(
         <div
           key={cuid()}
-          className={this.state.rating === num_stars ? 'star-line active shadow' : 'star-line'}
+          className={classList}
           onClick={(event) => this.updateRating(event, num_stars)}
           data-rating={num_stars}>{[...full_stars, ...empty_stars]}
         </div>
@@ -54,10 +58,9 @@ class Rating extends Component {
 
   render() {
     return (
-      <div>
+      <div className='container'>
         <div className='title'>{"Rating"}</div>
-        <br></br>
-        <div style={{cursor: 'pointer'}}>{this.makeStars()}</div>
+        {this.makeStars()}
       </div>
     )
   }

@@ -18,16 +18,25 @@ class CuisineType extends Component {
   }
 
   makeListOfCuisines() {
-    let cuisines = this.props.cuisines.slice(0, 7)
+    const cuisines = this.props.cuisines.slice(0, 7)
+    let classList = "flex-spacebetween filter-type"
     return cuisines.map(cuisine => {
+      if (this.state.cuisine === cuisine.name)
+        classList += ' active'
       return (
         <div
           key={cuid()}
-          className={this.state.cuisine === cuisine.name ? "flex-column cursor filter-type active shadow" : "flex-column cursor filter-type"}
+          className={classList}
           onClick={(event) => this.updateSelectedCuisine(event, cuisine)}
           >
-          <div key={cuid()} className='cuisine-name'>{cuisine.name}</div>
-          <div key={cuid()} className="flex-column cursor filter-type light-text">{cuisine.count}</div>
+          <div
+            key={cuid()}
+            >{cuisine.name}
+          </div>
+          <div
+            key={cuid()}
+            >{cuisine.count}
+          </div>
         </div>
       )
     })
@@ -35,9 +44,9 @@ class CuisineType extends Component {
 
   render() {
     return (
-      <div>
-        <div className='title'>{"Cuisine/Food Type"}</div>
-        <div className='flex-column' style={{fontSize: '1.75rem'}}>
+      <div className="container">
+        <div className='title'>{"Cuisine, Food Type"}</div>
+        <div className='container'>
           {this.makeListOfCuisines()}
         </div>
       </div>
