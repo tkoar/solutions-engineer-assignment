@@ -14,7 +14,8 @@
 }
 
 .title {
-  font-size: 2.5vw;
+  font-size: 2vw;
+  font-weight: bold;
   align-self: flex-start;
 }
 
@@ -54,20 +55,33 @@
   padding-bottom: 2vw;
 }
 
+
 form {
   min-width: 100%
 }
 
-input {
+input, button {
   border-radius: .5vw;
   font-size: 1.5vw;
-  margin: 1vw;
-  min-width: 80%;
+  margin: 0.5%;
+  min-width: 92%;
   height: 4vw;
   box-sizing: border-box;
-  border: none;
   align-self: center;
   padding: 1vw;
+  border: none;
+  color: black;
+}
+
+button {
+  background-color: #4A96C1;
+  color: white;
+}
+
+button:hover, button:active {
+  cursor: pointer;
+  background-color: lightgrey;
+  color: black;
 }
 
 .result-list {
@@ -155,13 +169,13 @@ a {
 .filter-type {
   padding: .25vw;
   font-size: 1.5vw;
+  border-radius: .5vw;
 }
 
 .filter-type:hover, .filter-type:active {
   cursor: pointer;
   background-color: #4A96C1;
-  color: black;
-  border-radius: .5vw;
+  color: white;
 }
 
 .flex-spacebetween {

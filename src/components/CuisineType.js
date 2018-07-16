@@ -46,7 +46,7 @@ class CuisineType extends Component {
   render() {
     return (
       <div className="container">
-        <div className='title'>{"Cuisine, Food Type"}</div>
+        <div className='title'>{"Cuisine | Food Type"}</div>
         <div className='container'>
           {this.makeListOfCuisines()}
         </div>

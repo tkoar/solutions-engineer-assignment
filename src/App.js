@@ -19,61 +19,79 @@ class App extends Component {
     searchCount: undefined,
     searchTime: undefined,
     currentCuisine: undefined,
-    minRating: undefined,
+    minRating: 0,
     paymentType: undefined,
     cuisineTypes: []
   }
 
+  // -------- update methods -------
   updateSearchQuery = (searchQuery) => {
-    this.setState({searchQuery: searchQuery, pageNumber: 0}, () => this.updateSearch())
+    this.setState({searchQuery: searchQuery, pageNumber: 0}, this.updateSearch)
+  }
+
+  updateBasedOnRating = (rating) => {
+    this.setState({minRating: rating, pageNumber: 0}, this.updateSearch)
   }
 
   updateCuisine = (cuisine) => {
     if (cuisine) {
-      this.setState({currentCuisine: cuisine.name, pageNumber: 0}, () => this.updateSearch())
+      this.setState({currentCuisine: cuisine.name, pageNumber: 0}, this.updateSearch)
     } else {
-      this.setState({currentCuisine: null, pageNumber: 0}, () => this.updateSearch())
+      this.setState({currentCuisine: null, pageNumber: 0}, this.updateSearch)
     }
   }
 
+  updatePageNumber = () => {
+    this.setState({pageNumber: this.state.pageNumber + 1}, this.updateSearch)
+  }
+
+  updatePaymentType = (paymentType) => {
+    this.setState({paymentType: paymentType, pageNumber: 0}, this.updateSearch)
+  }
+
+  setLocation = ({lat, lng}) => {
+    this.setState({lat: lat, lng: lng, pageNumber: 0}, this.updateSearch)
+  }
+  // ----------------------------
+
   updateSearch = () => {
+    // working locally but not on github pages
+    // shows results but not according to search query
+    // only happens after setting location
+    // need make sure that query is giving client at least 3 new restaurants
+    // each time they click 'show more'
+    // also need to fix the
     let helper = algoliasearchHelper(client, index_name, {facets: ["food_type"]})
-    let offset = this.state.pageNumber*3
-    helper.setQueryParameter('offset', offset)
-    helper.setQueryParameter('length', 3)
     if (this.state.currentCuisine) {
-      helper.setQuery(this.state.searchQuery)
-      helper.addFacetRefinement("food_type", this.state.currentCuisine).search()
+      helper.addFacetRefinement("food_type", this.state.currentCuisine)
     }
     if (this.state.lat && this.state.lng) {
-      helper.setQuery(this.state.searchQuery)
       helper.setQueryParameter('getRankingInfo', true)
       helper.setQueryParameter('aroundLatLng',`${this.state.lat}, ${this.state.lng}`)
-      helper.search()
-    } else {
-      helper.setQuery(this.state.searchQuery).search()
     }
+    helper.setQuery(this.state.searchQuery)
+    helper.search()
     this.updateStateWithSearchResults(helper)
   }
 
   updateStateWithSearchResults = (helper) => {
-    let results = []
-    if (this.state.pageNumber) {
-      results = [...this.state.searchResults]
-    }
+    let sliceTo = 3 + (this.state.pageNumber*3)
+
     helper.on("result", (content) => {
+      console.log(content);
       this.setState({
-        searchResults: [...results, ...this.filterResults(content.hits)],
+        searchResults: this.filterResults(content.hits).slice(0, sliceTo),
         searchCount: content.nbHits,
         searchTime: content.processingTimeMS,
         cuisineTypes: content.getFacetValues("food_type")
-      }, this.checkResultCount)
+      })
     })
   }
 
   checkResultCount = () => {
-    // need to figure out how to query for more results
-    // if there are fewer than 3 results sent to the results list
+    if (this.state.searchResults.length < 3) {
+      this.updatePageNumber()
+    }
   }
 
   handleSuccessError = (error, content, action) => {
@@ -83,10 +101,6 @@ class App extends Component {
     } else {
       console.log("Success " + action + "!", content)
     }
-  }
-
-  updateBasedOnRating = (rating) => {
-    this.setState({minRating: rating, pageNumber: 0}, () => this.updateSearch())
   }
 
   filterResultsBasedOnRating = (searchResults) => {
@@ -100,12 +114,13 @@ class App extends Component {
     const altPayments = ["Diners Club", "Carte Blanche", "American Express"]
     return searchResults.filter((restaurant, idx) => {
       if (restaurant.payment_options.includes(this.state.paymentType)) {
-        return restaurant
+        return true
       } else if (altPayments.includes(this.state.paymentType)) {
         if (restaurant.payment_options.includes("Discover")) {
-          return restaurant
+          return true
         }
       }
+      return false
     })
   }
 
@@ -124,21 +139,13 @@ class App extends Component {
     }
   }
 
-  updatePaymentType = (paymentType) => {
-    this.setState({paymentType: paymentType, pageNumber: 0}, () => this.updateSearch())
-  }
-
-  setLocation = (coords) => {
-    this.setState({lat: coords.lat, lng: coords.lng, pageNumber: 0}, () => this.updateSearch())
-  }
-
   setIndex() {
     let indexSettings = {
       'attributesForFaceting': ['food_type'],
       'sortFacetValuesBy': 'count',
       'searchableAttributes': ["name","food_type","city","area","neighborhood"],
       'ranking': ['typo','geo','words','attribute','proximity','exact','custom'],
-      'hitsPerPage': 3,
+      'hitsPerPage': 300,
       'paginationLimitedTo': 5000
     }
     index.setSettings(
@@ -150,10 +157,6 @@ class App extends Component {
   componentDidMount() {
     this.setIndex()
     this.updateSearch()
-  }
-
-  updatePageNumber = () => {
-    this.setState({pageNumber: this.state.pageNumber + 1}, this.updateSearch)
   }
 
 
