@@ -26,9 +26,14 @@ class Location extends Component {
     fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + address)
       .then(r => r.json())
       .then(json => {
-        console.log(json)
-        this.props.setLocation(json['results'][0]['geometry']['location'])
-        this.setState({location: json['results'][0]['formatted_address']})
+        try {
+          this.props.setLocation(json['results'][0]['geometry']['location'])
+          this.setState({location: json['results'][0]['formatted_address']})
+        }
+        catch(error) {
+          alert("Oops! We are having trouble pinpointing your location. Try typing in the address you'd like to search for.")
+          console.error(error);
+        }
       })
   }
 
@@ -45,14 +50,14 @@ class Location extends Component {
             value={this.state.location}
             placeholder={"Address, City, Zip, or Point of Interest..."}
             onChange={(event) => this.handleLocationChange(event)}
-            style={{maxWidth: '49vw', minWidth: '49vw'}}
+            style={{maxWidth: '46vw', minWidth: '46vw'}}
             >
           </input>
           <input
             type='submit'
             value={"Set Your Location"}
             onClick={(event) => this.getLocation(event)}
-            style={{maxWidth: '29vw', minWidth: '29vw', backgroundColor: 'lightgrey'}}
+            style={{maxWidth: '26vw', minWidth: '26vw', backgroundColor: 'lightgrey'}}
             >
           </input>
         </form>

@@ -10,6 +10,7 @@ const algoliasearchHelper = require('algoliasearch-helper')
 class App extends Component {
 
   state = {
+    pageNumber: 0,
     lat: undefined,
     lng: undefined,
     userLocationAccepted: undefined,
@@ -24,19 +25,24 @@ class App extends Component {
   }
 
   updateSearchQuery = (searchQuery) => {
-    this.setState({searchQuery: searchQuery}, () => this.updateSearch())
+    this.setState({searchQuery: searchQuery, pageNumber: 0}, () => this.updateSearch())
   }
 
   updateCuisine = (cuisine) => {
     if (cuisine) {
-      this.setState({currentCuisine: cuisine.name}, () => this.updateSearch())
+      this.setState({currentCuisine: cuisine.name, pageNumber: 0}, () => this.updateSearch())
     } else {
-      this.setState({currentCuisine: null}, () => this.updateSearch())
+      this.setState({currentCuisine: null, pageNumber: 0}, () => this.updateSearch())
     }
   }
 
   updateSearch = () => {
-    const helper = algoliasearchHelper(client, index_name, {facets: ["food_type"]})
+    let helper = algoliasearchHelper(client, index_name, {facets: ["food_type"]})
+    if (this.state.pageNumber) {
+      let offset = this.state.pageNumber*3
+      helper.setQueryParameter('offset', offset)
+      helper.setQueryParameter('length', 3).search()
+    }
     if (this.state.currentCuisine) {
       helper.setQuery(this.state.searchQuery)
       helper.addFacetRefinement("food_type", this.state.currentCuisine).search()
@@ -53,9 +59,13 @@ class App extends Component {
   }
 
   updateStateWithSearchResults = (helper) => {
+    let results = []
+    if (this.state.pageNumber) {
+      results = [...this.state.searchResults]
+    }
     helper.on("result", (content) => {
       this.setState({
-        searchResults: this.filterResults(content.hits),
+        searchResults: [...results, ...this.filterResults(content.hits)],
         searchCount: content.nbHits,
         searchTime: content.processingTimeMS,
         cuisineTypes: content.getFacetValues("food_type")
@@ -73,7 +83,7 @@ class App extends Component {
   }
 
   updateBasedOnRating = (rating) => {
-    this.setState({minRating: rating}, () => this.updateSearch())
+    this.setState({minRating: rating, pageNumber: 0}, () => this.updateSearch())
   }
 
   filterResultsBasedOnRating = (searchResults) => {
@@ -112,11 +122,11 @@ class App extends Component {
   }
 
   updatePaymentType = (paymentType) => {
-    this.setState({paymentType: paymentType}, () => this.updateSearch())
+    this.setState({paymentType: paymentType, pageNumber: 0}, () => this.updateSearch())
   }
 
   setLocation = (coords) => {
-    this.setState({lat: coords.lat, lng: coords.lng}, () => this.updateSearch())
+    this.setState({lat: coords.lat, lng: coords.lng, pageNumber: 0}, () => this.updateSearch())
   }
 
   setIndex() {
@@ -124,7 +134,9 @@ class App extends Component {
       'attributesForFaceting': ['food_type'],
       'sortFacetValuesBy': 'count',
       'searchableAttributes': ["name","food_type","city","area","neighborhood"],
-      ranking: ['typo','geo','words','attribute','proximity','exact','custom']
+      'ranking': ['typo','geo','words','attribute','proximity','exact','custom'],
+      'hitsPerPage': 3,
+      'paginationLimitedTo': 5000
     }
     index.setSettings(
       indexSettings,
@@ -137,16 +149,21 @@ class App extends Component {
     this.updateSearch()
   }
 
+  updatePageNumber = () => {
+    this.setState({pageNumber: this.state.pageNumber + 1}, this.updateSearch)
+  }
+
+
   render() {
     return (
       <div className="App flex-row">
-        <div>
+        <div className={'search-container'}>
           <SearchBar
             updateSearchQuery={this.updateSearchQuery}
           />
           <Location setLocation={this.setLocation}/>
         </div>
-        <div className='flex-column'>
+        <div className='flex-column' style={{backgroundColor: 'lightgrey'}}>
           <SideBar
             cuisines={this.state.cuisineTypes}
             updateCuisine={this.updateCuisine}
@@ -155,6 +172,7 @@ class App extends Component {
           />
           <ResultList
             results={this.state.searchResults}
+            updatePageNumber={this.updatePageNumber}
           />
         </div>
       </div>

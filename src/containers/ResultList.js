@@ -10,10 +10,22 @@ class ResultsList extends Component {
     })
   }
 
+  showNextPage = (event) => {
+    this.props.updatePageNumber()
+  }
+
   render() {
+    console.log(this.props.results);
     return (
       <div className='result-list'>
         {this.makeResults()}
+        <input
+          type='button'
+          value={"Show More Results"}
+          onClick={(event) => this.showNextPage(event)}
+          style={{maxWidth: '26vw', minWidth: '26vw', backgroundColor: 'white'}}
+          >
+        </input>
       </div>
     )
   }

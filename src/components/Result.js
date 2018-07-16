@@ -33,7 +33,7 @@ class Result extends Component {
       <div className='result'>
         <div className='img-container'><img className="result-img shadow" src={this.props.image_url} alt={this.props.name}></img></div>
         <div className='result-rating'>
-          <div className='result-title'>{this.props.name}</div>
+          <a href={this.props.reserve_url} target={"_blank"} className='result-title'>{this.props.name}</a>
           <div className='result-stars-count'>
             {this.props.stars_count}
             <div className='star-container'>{this.makeStars()}</div>

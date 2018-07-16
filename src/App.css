@@ -6,7 +6,7 @@
   padding-bottom: 5vw;
   background-image: url("resources/graphics/background_@2X.png");
   background-repeat: repeat;
-  font-family: 'Gill Sans', 'Gill Sans MT', 'Calibri', 'Trebuchet MS', sans-serif;
+  font-family: 'Arial', 'Cambria', 'Calibri', 'Georgia', sans-serif;
 }
 
 .App>* {
@@ -30,7 +30,7 @@
   flex-wrap: wrap;
   width: 100%;
   align-content: left;
-  justify-content: left;
+  justify-content: space-between;
 }
 
 .sidebar {
@@ -39,25 +39,31 @@
 }
 
 .result-list {
-  width: 70%;
+  width: 69.8%;
 }
 
 .search {
   display: flex;
   align-content: center;
   justify-content: center;
+}
+
+.search-container {
   background-color: teal;
+  padding-top: 2vw;
+  padding-bottom: 2vw;
 }
 
 input {
   border-radius: .5vw;
   font-size: 1.5vw;
   margin: 1vw;
-  min-width: 80vw;
+  min-width: 74vw;
   height: 4vw;
   box-sizing: border-box;
   border: none;
   align-self: center;
+  padding: 1vw;
 }
 
 .result-list {
@@ -80,14 +86,18 @@ input {
 
 .result:hover, .result:active {
   box-shadow: .25vw .25vw .15vw teal;
-  font-weight: bolder;
   border-radius: 1vw;
+  background-color: #F3F5FE;
 }
 
 .result-title {
   align-self: flex-start;
   padding-top: 1vw;
   font-size: 2vw;
+}
+
+a {
+  text-decoration: none; color: black;
 }
 
 .result-stars-count {
@@ -142,8 +152,8 @@ input {
 
 .filter-type:hover, .filter-type:active {
   cursor: pointer;
-  background-color: teal;
-  color: white;
+  background-color: #F3F5FE;
+  color: black;
   border-radius: .5vw;
 }
 
@@ -183,8 +193,8 @@ input {
 
 .active {
   transform: scale(1.1);
-  box-shadow: .15vw .15vw .025vw teal;
-  background-color: teal;
+  box-shadow: .15vw .15vw .025vw #F3F5FE;
+  background-color: #F3F5FE;
   border-radius: .5vw;
-  color: white;
+  color: black;
 }
