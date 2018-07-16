@@ -44,20 +44,20 @@ class Location extends Component {
   render() {
     return (
       <div className='search'>
-        <form onSubmit={(event) => this.getLocation(event)} className="flex-row" style={{flexWrap: 'nowrap'}}>
+        <form onSubmit={(event) => this.getLocation(event)} style={{flexWrap: 'nowrap'}}>
           <input
             type='text'
             value={this.state.location}
             placeholder={"Address, City, Zip, or Point of Interest..."}
             onChange={(event) => this.handleLocationChange(event)}
-            style={{maxWidth: '46vw', minWidth: '46vw'}}
+            style={{maxWidth: '50%', minWidth: '50%'}}
             >
           </input>
           <input
             type='submit'
             value={"Set Your Location"}
             onClick={(event) => this.getLocation(event)}
-            style={{maxWidth: '26vw', minWidth: '26vw', backgroundColor: 'lightgrey'}}
+            style={{maxWidth: '28%', minWidth: '28%', backgroundColor: 'lightgrey'}}
             >
           </input>
         </form>

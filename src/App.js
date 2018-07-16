@@ -40,6 +40,7 @@ class App extends Component {
     let helper = algoliasearchHelper(client, index_name, {facets: ["food_type"]})
     if (this.state.pageNumber) {
       let offset = this.state.pageNumber*3
+      helper.setQuery(this.state.searchQuery)
       helper.setQueryParameter('offset', offset)
       helper.setQueryParameter('length', 3).search()
     }
@@ -48,9 +49,9 @@ class App extends Component {
       helper.addFacetRefinement("food_type", this.state.currentCuisine).search()
     }
     if (this.state.lat && this.state.lng) {
+      helper.setQuery(this.state.searchQuery)
       helper.setQueryParameter('getRankingInfo', true)
       helper.setQueryParameter('aroundLatLng',`${this.state.lat}, ${this.state.lng}`)
-      helper.setQueryParameter('aroundRadius', 7000)
       helper.search()
     } else {
       helper.setQuery(this.state.searchQuery).search()
@@ -69,8 +70,13 @@ class App extends Component {
         searchCount: content.nbHits,
         searchTime: content.processingTimeMS,
         cuisineTypes: content.getFacetValues("food_type")
-      })
+      }, this.checkResultCount)
     })
+  }
+
+  checkResultCount = () => {
+    // need to figure out how to query for more results
+    // if there are fewer than 3 results sent to the results list
   }
 
   handleSuccessError = (error, content, action) => {

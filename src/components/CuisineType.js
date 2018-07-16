@@ -34,6 +34,7 @@ class CuisineType extends Component {
             >{cuisine.name}
           </div>
           <div
+            className="light-text"
             key={cuid()}
             >{cuisine.count}
           </div>

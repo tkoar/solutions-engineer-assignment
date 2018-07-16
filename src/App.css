@@ -1,9 +1,9 @@
 .App {
   text-align: center;
-  padding-top: 5vw;
-  padding-right: 8vw;
-  padding-left: 8vw;
-  padding-bottom: 5vw;
+  padding-top: 5%;
+  padding-right: 10%;
+  padding-left: 10%;
+  padding-bottom: 5%;
   background-image: url("resources/graphics/background_@2X.png");
   background-repeat: repeat;
   font-family: 'Arial', 'Cambria', 'Calibri', 'Georgia', sans-serif;
@@ -49,16 +49,20 @@
 }
 
 .search-container {
-  background-color: teal;
+  background-color: #33678B;
   padding-top: 2vw;
   padding-bottom: 2vw;
+}
+
+form {
+  min-width: 100%
 }
 
 input {
   border-radius: .5vw;
   font-size: 1.5vw;
   margin: 1vw;
-  min-width: 74vw;
+  min-width: 80%;
   height: 4vw;
   box-sizing: border-box;
   border: none;
@@ -68,6 +72,9 @@ input {
 
 .result-list {
   background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
 }
 
 .result-img {
@@ -85,7 +92,7 @@ input {
 }
 
 .result:hover, .result:active {
-  box-shadow: .25vw .25vw .15vw teal;
+  box-shadow: .25vw .25vw .15vw #33678B;
   border-radius: 1vw;
   background-color: #F3F5FE;
 }
@@ -133,8 +140,8 @@ a {
 }
 
 .light-text {
-  font-size: 1.75vw;
-  color: lightgrey;
+  font-size: 1.5vw;
+  color: #B0B0B0;
 }
 
 .result-description {
@@ -152,7 +159,7 @@ a {
 
 .filter-type:hover, .filter-type:active {
   cursor: pointer;
-  background-color: #F3F5FE;
+  background-color: #4A96C1;
   color: black;
   border-radius: .5vw;
 }
