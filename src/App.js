@@ -69,16 +69,13 @@ class App extends Component {
       helper.setQueryParameter('getRankingInfo', true)
       helper.setQueryParameter('aroundLatLng',`${this.state.lat}, ${this.state.lng}`)
     }
-    helper.setQuery(this.state.searchQuery)
-    helper.search()
+    helper.setQuery(this.state.searchQuery).search()
     this.updateStateWithSearchResults(helper)
   }
 
   updateStateWithSearchResults = (helper) => {
     let sliceTo = 3 + (this.state.pageNumber*3)
-
     helper.on("result", (content) => {
-      console.log(content);
       this.setState({
         searchResults: this.filterResults(content.hits).slice(0, sliceTo),
         searchCount: content.nbHits,
@@ -86,12 +83,6 @@ class App extends Component {
         cuisineTypes: content.getFacetValues("food_type")
       })
     })
-  }
-
-  checkResultCount = () => {
-    if (this.state.searchResults.length < 3) {
-      this.updatePageNumber()
-    }
   }
 
   handleSuccessError = (error, content, action) => {
@@ -145,7 +136,7 @@ class App extends Component {
       'sortFacetValuesBy': 'count',
       'searchableAttributes': ["name","food_type","city","area","neighborhood"],
       'ranking': ['typo','geo','words','attribute','proximity','exact','custom'],
-      'hitsPerPage': 300,
+      'hitsPerPage': 1000,
       'paginationLimitedTo': 5000
     }
     index.setSettings(

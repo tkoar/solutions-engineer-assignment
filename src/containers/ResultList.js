@@ -14,16 +14,26 @@ class ResultsList extends Component {
     this.props.updatePageNumber()
   }
 
-  render() {
-    console.log(this.props.results);
-    return (
-      <div className='result-list'>
-        {this.makeResults()}
+  showButton = () => {
+    if (this.props.results.length < 1) {
+      return (<div className='loader'></div>)
+    } else {
+      return (
         <button
           onClick={(event) => this.showNextPage(event)}
           >
             {"Show More Results"}
         </button>
+      )
+    }
+  }
+
+  render() {
+    console.log(this.props.results);
+    return (
+      <div className='result-list'>
+        {this.makeResults()}
+        {this.showButton()}
       </div>
     )
   }

@@ -1,4 +1,5 @@
 .App {
+  min-height: 100%;
   text-align: center;
   padding-top: 5%;
   padding-right: 10%;
@@ -218,4 +219,15 @@ a {
   background-color: #F3F5FE;
   border-radius: .5vw;
   color: black;
+}
+
+.loader {
+  margin-top: 8vw;
+  align-self: center;
+  border: 1vw solid #33678B;
+  border-top: 1vw solid #4A96C1;
+  border-radius: 50%;
+  width: 14vw;
+  height: 14vw;
+  animation: spin 2s linear infinite;
 }
