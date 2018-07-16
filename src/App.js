@@ -38,12 +38,9 @@ class App extends Component {
 
   updateSearch = () => {
     let helper = algoliasearchHelper(client, index_name, {facets: ["food_type"]})
-    if (this.state.pageNumber) {
-      let offset = this.state.pageNumber*3
-      helper.setQuery(this.state.searchQuery)
-      helper.setQueryParameter('offset', offset)
-      helper.setQueryParameter('length', 3).search()
-    }
+    let offset = this.state.pageNumber*3
+    helper.setQueryParameter('offset', offset)
+    helper.setQueryParameter('length', 3)
     if (this.state.currentCuisine) {
       helper.setQuery(this.state.searchQuery)
       helper.addFacetRefinement("food_type", this.state.currentCuisine).search()
