@@ -138,10 +138,9 @@ class App extends Component {
     for (var i = 0; i < altPaymentTypes.length; i++) {
       if (restaurant.payment_options.includes(altPaymentTypes[i])) {
         return true
-      } else {
-        return false
       }
     }
+    return false
   }
 
   filterResults = (searchResults) => {
