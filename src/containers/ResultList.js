@@ -40,7 +40,6 @@ class ResultsList extends Component {
   }
 
   render() {
-    console.log(this.props.results);
     return (
       <div className='result-list'>
         <div>{this.showSearchStats()}</div>

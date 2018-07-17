@@ -74,7 +74,6 @@ class App extends Component {
   updateStateWithSearchResults = (helper) => {
     let sliceTo = 3 + (this.state.pageNumber*3)
     helper.on("result", (content) => {
-      console.log(content)
       let results = this.filterResults(content.hits)
       this.setState({
         searchResults: results.slice(0, sliceTo),
