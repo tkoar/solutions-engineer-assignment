@@ -24,10 +24,27 @@ class App extends Component {
     cuisineTypes: []
   }
 
+  // componentWillMount() {
+  //   this.checkLocalStorage()
+  // }
+
   componentDidMount() {
     this.setIndex()
     this.updateSearch()
   }
+
+  // checkLocalStorage = () => {
+  //   if (localStorage.getItem('prevSearchState')) {
+  //     let prevState = localStorage.getItem('prevSearchState')
+  //     this.setState({searchQuery: prevState.searchQuery, currentCuisine: prevState.currentCuisine, minRating: prevState.minRating, paymentType: prevState.paymentType}, this.updateSearch)
+  //   } else {
+  //     this.updateSearch()
+  //   }
+  // }
+
+  // setLocalStorage = () => {
+  //   localStorage.setItem('prevSearchState', JSON.stringify({searchQuery: this.state.searchQuery, currentCuisine: this.state.currentCuisine, minRating: this.state.minRating, paymentType: this.state.paymentType}))
+  // }
 
   // -------- update functions -------
   updateSearchQuery = (searchQuery) => {
@@ -67,6 +84,9 @@ class App extends Component {
       helper.setQueryParameter('getRankingInfo', true)
       helper.setQueryParameter('aroundLatLng',`${this.state.lat}, ${this.state.lng}`)
     }
+    if (!this.state.lat && !this.state.lng) {
+      helper.setQueryParameter('aroundLatLngViaIP', true)
+    }
     helper.setQuery(this.state.searchQuery).search()
     this.updateStateWithSearchResults(helper)
   }
@@ -80,7 +100,7 @@ class App extends Component {
         searchCount: results.length,
         searchTime: content.processingTimeMS,
         cuisineTypes: content.getFacetValues("food_type")
-      })
+      }, this.setLocalStorage)
     })
   }
 
@@ -103,17 +123,25 @@ class App extends Component {
   }
 
   filterResultsBasedPaymentType = (searchResults) => {
-    const altPayments = ["Diners Club", "Carte Blanche", "American Express"]
+    const altPayments = ["Diners Club", "Carte Blanche"]
     return searchResults.filter((restaurant, idx) => {
       if (restaurant.payment_options.includes(this.state.paymentType)) {
         return true
-      } else if (altPayments.includes(this.state.paymentType)) {
-        if (restaurant.payment_options.includes("Discover")) {
-          return true
-        }
+      } else if (this.state.paymentType === 'Discover') {
+        return this.checkToSeeIfIncludesAltPaymentTypes(altPayments, restaurant)
       }
       return false
     })
+  }
+
+  checkToSeeIfIncludesAltPaymentTypes = (altPaymentTypes, restaurant) => {
+    for (var i = 0; i < altPaymentTypes.length; i++) {
+      if (restaurant.payment_options.includes(altPaymentTypes[i])) {
+        return true
+      } else {
+        return false
+      }
+    }
   }
 
   filterResults = (searchResults) => {

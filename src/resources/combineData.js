@@ -3,28 +3,47 @@ const restaurantsListJson = require('./dataset/restaurants_list.json')
 const restaurantsInfoJson = csvToJSON()
 const combinedRestaurantJSON = combineData(restaurantsInfoJson, restaurantsListJson)
 
-function convertToJson(csvArry) {
-  const headers = csvArry[0].split(";")
-  let json = csvArry.map((restaurantInfo, idx) => {
-    let resturant = restaurantInfo.split(";")
-    let newObj = {}
-    headers.forEach((header, index) => newObj[header] = resturant[index])
-    return newObj
-  })
-  return json.slice(1,-1)
-}
-
-function csvToJSON() {
-  let text = FS.readFileSync('src/resources/dataset/restaurants_info.csv', 'utf8', function(err, data) {
+function csvToJSON(file='src/resources/dataset/restaurants_info.csv') {
+  let text = FS.readFileSync(file, 'utf8', (err, data) => {
     if (err) {
       console.log(err)
+      console.log(`Failed to read ${file}`);
     }
   })
-  return convertToJson(text.split("\n"))
+  const lines = text.split("\n")
+  const cleanedData = cleanData(lines)
+  return convertToJson(lines)
+}
+
+function convertToJson(csvArray) {
+  const headers = csvArray[0].split(";") // create array with the value for each header, to use as keys
+  const restaurantDataArray = csvArray.slice(1) // create separate array for data and remove headers
+  let json = restaurantDataArray.map((restaurantInfo, idx) => {
+    return createJsonObj(headers, restaurantInfo)
+  })
+  return json
+}
+
+function createJsonObj(headers, restuarantDataString) {
+  const restaurant = restuarantDataString.split(";")
+  return headers.reduce((acc, header, index) => {
+    if (header === 'stars_count') {
+      acc[header] = parseFloat(restaurant[index])
+    } else if (header === 'reviews_count') {
+      acc[header] = parseInt(restaurant[index])
+    } else {
+      acc[header] = restaurant[index]
+    }
+    return acc
+  }, {})
+}
+
+function cleanData(dataArray) {
+  return dataArray.filter((dataElement, idx) => !!dataElement)
 }
 
 function combineData(restaurantInfo, restaurantList) {
-  let sortedRestaurantInfo = restaurantInfo.sort(function(a, b) {
+  let sortedRestaurantInfo = restaurantInfo.sort((a, b) => {
     return parseInt(a.objectID) - parseInt(b.objectID)
   })
   let sortedRestaurantList = restaurantList.sort((restaurant1, restaurant2) => {
@@ -35,17 +54,9 @@ function combineData(restaurantInfo, restaurantList) {
   })
 }
 
-function numbersParsedCombinedJson(json) {
-  return json.map((el, i) => {
-    if (el['stars_count'])
-      el['stars_count'] = parseFloat(el['stars_count'])
-    if (el['reviews_count'])
-      el['reviews_count'] = parseInt(el['reviews_count'])
-    return el
-  })
-}
-
-FS.writeFile('src/resources/dataset/combined_restaurant_data_fixed.json', JSON.stringify(numbersParsedCombinedJson(combinedRestaurantJSON)), 'utf8', (err) => {
+// once the data from the CSV is parsed into JSON and combined with the existing JSON data
+// we write the combined JSON to a new JSON file to use as our index's dataset
+FS.writeFile('src/resources/dataset/combined_restaurant_data_fixed.json', JSON.stringify(combinedRestaurantJSON), 'utf8', (err) => {
   if(err) {
     console.log(err)
   }
