@@ -26,6 +26,33 @@
   flex-wrap: wrap;
 }
 
+.center {
+  justify-content: center;
+  align-items: center;
+  align-self: center;
+}
+
+.no-wrap {
+  flex-wrap: nowrap;
+}
+
+.result-stats {
+  text-align: left;
+  position: relative;
+  padding-left: 1.25vw;
+  padding-top: 1.25vw;
+}
+
+.search-count {
+  font-size: 1.75vw;
+  font-weight: 500;
+}
+
+.search-time {
+  font-size: 1.3vw;
+  font-weight: lighter;
+}
+
 .flex-column {
   display: flex;
   flex-direction: row;

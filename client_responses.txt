@@ -1,0 +1,120 @@
+Question 1: Hello,
+
+I'm new to search engines, and there are a lot of concepts I'm not educated on. To make my onboarding smoother, it'd help if you could provide me with some definitions of the following concepts:
+
+Records
+Indexing
+I'm also struggling with understanding what types of metrics would be useful to include in the "Custom Ranking."
+
+Cheers, George
+
+Response 1: --------
+Hi George,
+
+Thank you for reaching out! I completely understand your desire to learn more about our search engine and would be happy to provide more clarification.
+
+Below, I have included some definitions for Records and Indexing as well as a description of how our Custom Ranking works.
+
+Indexing - An index is a location within Algolia where clients can import the data they wish to make searchable. Indexing is the process of adding, updating, deleting, or manipulating data within an index. Indexing can be done in three ways:
+  1. Algolia API Client (recommended method)
+  2. Via the Algolia Dashboard
+  3. Using a Third-Party platform
+
+Due to our international presence, it is important to note that our documentation uses the words indexes and indices interchangeably, but they are both simply the plural of index. Below, you can find some helpful resources to gain more context around indexes and indexing:
+  - https://www.algolia.com/doc/guides/indexing/indexing-overview/
+  - https://www.algolia.com/doc/guides/getting-started/the-implementation-process/#indexing-data
+
+Records - Each item or entry of data in an index is known as a record. Algolia stores each record in an index as a JSON (JavaScript Object Notation) schemaless object. Once in an index, each attribute of the record can be used for displaying, searching, filtering, or ranking.
+
+Please note that our documentation sometimes refers to records as objects. For more information on records, please visit the link below:
+  - https://www.algolia.com/doc/guides/getting-started/what-is-algolia/#vocabulary
+
+Custom Ranking - Algolia's search formula first optimizes search results based on textual relevance, which means that we order your results so that they best match your search criteria. Our custom ranking feature allows clients to leverage the business metrics that are most relevant to them to more effectively rank search results. This means that if any results are textually a match (a 'tie'), they will be sorted according to the custom ranking provided. For example, in the case of an e-commerce platform, if two results are the same item in differing quantities (i.e. bulk and single-use) they may be a textual tie, in which case a custom ranking (price, quantity, availability) would decide which way to sort these two items.
+The custom ranking field will accept any type value and attribute that have relevance to the records in the index. Examples include raw values like number of sales, views, likes or computed values like popularity that is calculated before adding the record to Algolia.
+
+To learn more about how our custom ranking feature works, please visit the link below:
+  - https://www.algolia.com/doc/guides/ranking/custom-ranking/#custom-ranking-overview
+
+
+I hope you find the above to be informative and clarifying, but please do not hesitate to reach out for further explanation.
+
+Best regards,
+
+Terrance Koar
+Solutions Engineer
+Algolia
+
+--------------------------------------------------------------------------------
+Question 2: Hello,
+
+Sorry to give you the kind of feedback that I know you do not want to hear, but I really hate the new dashboard design. Clearing and deleting indexes are now several clicks away. I am needing to use these features while iterating, so this is inconvenient.
+
+Regards, Matt
+
+
+Response 2: --------
+Hi Matt,
+
+Thank you for reaching out to us with your feedback! We love feedback from our clients and are constantly trying to create a better product. I apologize for any frustrations our new design has caused, and I would like to suggest an alternative method for clearing and deleting indexes that might help make using our platform easier for you.
+
+We recommend setting up our API client, if you haven't already. This way, you can interact with your data directly instead of through the dashboard. Information on setting up the API client can be found here: https://www.algolia.com/doc/tutorials/getting-started/quick-start-with-the-api-client/javascript/
+
+Our API client provides methods for both clearing and deleting indices directly. Once you have our API client set up, you can use the client instance delete an index by name, or you can use the index instance to clear all records.
+
+For more information on how to delete an index using our API client, please visit the link below:
+  - https://www.algolia.com/doc/api-reference/api-methods/delete-index/
+
+For more information on how to clear an index using our API client, please visit the link below:
+  - https://www.algolia.com/doc/api-reference/api-methods/clear-index/
+
+For more information on how to manage indices using our API client, please visit the link below:
+  - https://www.algolia.com/doc/api-client/manage-indices/
+
+
+I hope the above helps make managing your indices much easier and more streamlined! If there is anyway we can help get the API client configured on your platform or provide any further assistance, please do not hesitate to reach out!
+
+Thank you,
+
+Terrance Koar
+Solutions Engineer
+Algolia
+
+--------------------------------------------------------------------------------
+Question 3: Hi,
+
+I'm looking to integrate Algolia in my website. Will this be a lot of development work for me? What's the high level process look like?
+
+Regards, Leo
+
+Response 1: --------
+Hi Leo,
+
+Thank you for reaching out! I would be happy to provide you with the information you need to get Algolia integrated on your website.
+
+We provide three ways to integrate our platform:
+  1. Our API client
+  2. Framework Integrations
+  3. Third-Party Extensions
+
+If you used a framework when building your website, the quickest set-up process would be using one of our framework integrations. We currently offer framework integrations for Rails, Laravel, Django, and Symfony. You can find a link to the documentation below:
+  - https://www.algolia.com/doc/guides/getting-started/ecosystem-overview/#framework-integrations
+
+If you are currently using a third-party platform, you could have Algolia up and running in minutes using one of the corresponding extensions that we offer. We provide third-party extensions for Magento, Wordpress, Zendesk, Shopify, and Jekyll. Please find a link to the documentation on how to integrate our third-party extensions below:
+  - https://www.algolia.com/doc/guides/getting-started/ecosystem-overview/#framework-integrations
+
+If you are not using a third-party platform or a framework that we currently offer integrations for, you can also get set up quickly with Algolia using our API client. It is quick and easy to sign-up and get your application credentials, and we provide extensive documentation and tutorials on setting up and using all that our platform has to offer. Please find a link to the documentation on how to get started setting up our API client below:
+  - https://www.algolia.com/doc/tutorials/getting-started/quick-start-with-the-api-client/javascript/
+
+Alternatively, you can also use our JavaScript search UI libraries to quickly create a lightning fast, intuitive search experience. Please find a link to a list of our JS UI libraries below:
+  - https://www.algolia.com/doc/guides/search-ui/building-a-search-ui/
+
+We strive to make our platform easy to integrate and understand by writing clear, concise documentation to help make your search experience the best it can be. We also provide a dashboard where you can manage your data, contributors, and see analytics for your application and performance on our platform. Please find a link to documentation providing a high level overview on how our Platform works:
+  - https://www.algolia.com/doc/guides/getting-started/the-implementation-process/
+
+Again, thank you for expressing your interest and I hope the information I provided gives you an idea as to how quickly and easily you can get Algolia set up. If you have any further questions or would like more information on how to get set up, please do not hesitate to reach back out!
+
+Thank you,
+
+Terrance Koar
+Solutions Engineer
+Algolia

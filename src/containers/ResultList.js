@@ -28,10 +28,22 @@ class ResultsList extends Component {
     }
   }
 
+  showSearchStats = () => {
+    if (this.props.searchCount) {
+      return(
+        <div className="result-stats">
+          <span className="search-count">{`${this.props.searchCount} results found `}</span>
+          <span className="search-time">{` in ${this.props.searchTime/1000} seconds.`}</span>
+        </div>
+      )
+    }
+  }
+
   render() {
     console.log(this.props.results);
     return (
       <div className='result-list'>
+        <div>{this.showSearchStats()}</div>
         {this.makeResults()}
         {this.showButton()}
       </div>

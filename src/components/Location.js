@@ -31,9 +31,9 @@ class Location extends Component {
           this.setState({location: json['results'][0]['formatted_address']})
         }
         catch(error) {
+          console.error(error)
           this.setState({location: ""})
           alert("Oops! We are having trouble pinpointing your location. Try typing in the address you'd like to search for.")
-          console.error(error)
         }
       })
   }

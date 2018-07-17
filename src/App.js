@@ -24,7 +24,12 @@ class App extends Component {
     cuisineTypes: []
   }
 
-  // -------- update methods -------
+  componentDidMount() {
+    this.setIndex()
+    this.updateSearch()
+  }
+
+  // -------- update functions -------
   updateSearchQuery = (searchQuery) => {
     this.setState({searchQuery: searchQuery, pageNumber: 0}, this.updateSearch)
   }
@@ -52,15 +57,8 @@ class App extends Component {
   setLocation = ({lat, lng}) => {
     this.setState({lat: lat, lng: lng, pageNumber: 0}, this.updateSearch)
   }
-  // ----------------------------
 
   updateSearch = () => {
-    // working locally but not on github pages
-    // shows results but not according to search query
-    // only happens after setting location
-    // need make sure that query is giving client at least 3 new restaurants
-    // each time they click 'show more'
-    // also need to fix the
     let helper = algoliasearchHelper(client, index_name, {facets: ["food_type"]})
     if (this.state.currentCuisine) {
       helper.addFacetRefinement("food_type", this.state.currentCuisine)
@@ -76,14 +74,18 @@ class App extends Component {
   updateStateWithSearchResults = (helper) => {
     let sliceTo = 3 + (this.state.pageNumber*3)
     helper.on("result", (content) => {
+      console.log(content)
+      let results = this.filterResults(content.hits)
       this.setState({
-        searchResults: this.filterResults(content.hits).slice(0, sliceTo),
-        searchCount: content.nbHits,
+        searchResults: results.slice(0, sliceTo),
+        searchCount: results.length,
         searchTime: content.processingTimeMS,
         cuisineTypes: content.getFacetValues("food_type")
       })
     })
   }
+
+// ----------------------------
 
   handleSuccessError = (error, content, action) => {
     if (error) {
@@ -145,11 +147,6 @@ class App extends Component {
     )
   }
 
-  componentDidMount() {
-    this.setIndex()
-    this.updateSearch()
-  }
-
 
   render() {
     return (
@@ -168,6 +165,8 @@ class App extends Component {
             updatePaymentType={this.updatePaymentType}
           />
           <ResultList
+            searchTime={this.state.searchTime}
+            searchCount={this.state.searchCount}
             results={this.state.searchResults}
             updatePageNumber={this.updatePageNumber}
           />
