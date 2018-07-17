@@ -3,13 +3,15 @@ import SearchBar from './components/SearchBar'
 import SideBar from './containers/SideBar'
 import ResultList from './containers/ResultList'
 import Location from './components/Location'
-import {index, index_name, client} from './resources/SearchTools'
+import {index_name, app_id} from './resources/SearchTools'
 import './App.css'
 const algoliasearchHelper = require('algoliasearch-helper')
+const algoliasearch = require('algoliasearch')
 
 class App extends Component {
 
   state = {
+    secure_key: '',
     pageNumber: 0,
     lat: undefined,
     lng: undefined,
@@ -24,27 +26,15 @@ class App extends Component {
     cuisineTypes: []
   }
 
-  // componentWillMount() {
-  //   this.checkLocalStorage()
-  // }
-
   componentDidMount() {
-    this.setIndex()
-    this.updateSearch()
+    this.setAPIKey()
   }
 
-  // checkLocalStorage = () => {
-  //   if (localStorage.getItem('prevSearchState')) {
-  //     let prevState = localStorage.getItem('prevSearchState')
-  //     this.setState({searchQuery: prevState.searchQuery, currentCuisine: prevState.currentCuisine, minRating: prevState.minRating, paymentType: prevState.paymentType}, this.updateSearch)
-  //   } else {
-  //     this.updateSearch()
-  //   }
-  // }
-
-  // setLocalStorage = () => {
-  //   localStorage.setItem('prevSearchState', JSON.stringify({searchQuery: this.state.searchQuery, currentCuisine: this.state.currentCuisine, minRating: this.state.minRating, paymentType: this.state.paymentType}))
-  // }
+  setAPIKey() {
+    fetch('https://restaurant-locator-server.herokuapp.com/auth/generate')
+      .then(resp => resp.json())
+      .then(json => this.setState({secure_key: json['secure_key']}, this.setIndex))
+  }
 
   // -------- update functions -------
   updateSearchQuery = (searchQuery) => {
@@ -76,7 +66,7 @@ class App extends Component {
   }
 
   updateSearch = () => {
-    let helper = algoliasearchHelper(client, index_name, {facets: ["food_type"]})
+    let helper = algoliasearchHelper(this.state.client, index_name, {facets: ["food_type"]})
     if (this.state.currentCuisine) {
       helper.addFacetRefinement("food_type", this.state.currentCuisine)
     }
@@ -159,7 +149,9 @@ class App extends Component {
   }
 
   setIndex() {
-    let indexSettings = {
+    const client = algoliasearch(app_id, this.state.secure_key)
+    const index = client.initIndex(index_name)
+    const indexSettings = {
       'attributesForFaceting': ['food_type'],
       'sortFacetValuesBy': 'count',
       'searchableAttributes': ["name","food_type","city","area","neighborhood"],
@@ -171,10 +163,12 @@ class App extends Component {
       indexSettings,
       (error, content) => this.handleSuccessError(error, content, "setting index settings")
     )
+    this.setState({index: index, client: client}, this.updateSearch)
   }
 
 
   render() {
+    console.log(this.state.key);
     return (
       <div className="App flex-row">
         <div className={'search-container'}>
