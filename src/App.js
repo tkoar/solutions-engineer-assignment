@@ -4,9 +4,10 @@ import SideBar from './containers/SideBar'
 import ResultList from './containers/ResultList'
 import Location from './components/Location'
 import {index_name, app_id} from './resources/SearchTools'
+import algoliasearchHelper from 'algoliasearch-helper'
+import algoliasearch from 'algoliasearch'
 import './App.css'
-const algoliasearchHelper = require('algoliasearch-helper')
-const algoliasearch = require('algoliasearch')
+
 
 class App extends Component {
 

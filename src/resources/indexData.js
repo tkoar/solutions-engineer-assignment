@@ -1,5 +1,5 @@
-const algoliasearch = require('algoliasearch');
-const algoliasearchHelper = require('algoliasearch-helper');
+import algoliasearchHelper from 'algoliasearch-helper'
+import algoliasearch from 'algoliasearch'
 const combinedRestaurantJSON = require('./dataset/combined_restaurant_data_fixed.json')
 const APP_ID = 'ZPSJDZC155'
 const indexName = 'open_table_restaurants'
