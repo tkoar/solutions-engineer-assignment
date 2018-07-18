@@ -33,7 +33,7 @@ class App extends Component {
   setAPIKey() {
     fetch('https://restaurant-locator-server.herokuapp.com/auth/generate')
       .then(resp => resp.json())
-      .then(json => this.setState({secure_key: json['secure_key']}, this.setIndex))
+      .then(json => this.setState({secure_key: json['secure_key']}, this.setClient))
   }
 
   // -------- update functions -------
@@ -148,27 +148,13 @@ class App extends Component {
     }
   }
 
-  setIndex() {
+  setClient() {
     const client = algoliasearch(app_id, this.state.secure_key)
-    const index = client.initIndex(index_name)
-    const indexSettings = {
-      'attributesForFaceting': ['food_type'],
-      'sortFacetValuesBy': 'count',
-      'searchableAttributes': ["name","food_type","city","area","neighborhood"],
-      'ranking': ['typo','geo','words','attribute','proximity','exact','custom'],
-      'hitsPerPage': 1000,
-      'paginationLimitedTo': 5000
-    }
-    index.setSettings(
-      indexSettings,
-      (error, content) => this.handleSuccessError(error, content, "setting index settings")
-    )
-    this.setState({index: index, client: client}, this.updateSearch)
+    this.setState({client: client}, this.updateSearch)
   }
 
 
   render() {
-    console.log(this.state.key);
     return (
       <div className="App flex-row">
         <div className={'search-container'}>

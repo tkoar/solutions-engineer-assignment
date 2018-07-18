@@ -17,7 +17,7 @@ class CuisineType extends Component {
     }
   }
 
-  makeListOfCuisines() {
+  makeListOfCuisines = () => {
     const cuisines = this.props.cuisines.slice(0, 7)
     let classList = "flex-spacebetween filter-type"
     return cuisines.map(cuisine => {

@@ -104,6 +104,7 @@ input, button {
 button {
   background-color: #4A96C1;
   color: white;
+  margin: 1vw;
 }
 
 button:hover, button:active {
