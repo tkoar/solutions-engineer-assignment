@@ -36,6 +36,11 @@ class App extends Component {
       .then(json => this.setState({secure_key: json['secure_key']}, this.setClient))
   }
 
+  setClient() {
+    const client = algoliasearch(app_id, this.state.secure_key)
+    this.setState({client: client}, this.updateSearch)
+  }
+
   // -------- update functions -------
   updateSearchQuery = (searchQuery) => {
     this.setState({searchQuery: searchQuery, pageNumber: 0}, this.updateSearch)
@@ -93,18 +98,10 @@ class App extends Component {
       }, this.setLocalStorage)
     })
   }
-
 // ----------------------------
 
-  handleSuccessError = (error, content, action) => {
-    if (error) {
-      console.log("There was an error " + action + "!", error)
-      throw error
-    } else {
-      console.log("Success " + action + "!", content)
-    }
-  }
 
+// -------- filter functions -------
   filterResultsBasedOnRating = (searchResults) => {
     const filteredResults = searchResults.filter((restaurant, idx) => {
       return Math.round(parseFloat(restaurant.stars_count)) >= parseFloat(this.state.minRating)
@@ -147,11 +144,7 @@ class App extends Component {
       return searchResults
     }
   }
-
-  setClient() {
-    const client = algoliasearch(app_id, this.state.secure_key)
-    this.setState({client: client}, this.updateSearch)
-  }
+// ----------------------------
 
 
   render() {
