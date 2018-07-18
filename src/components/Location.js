@@ -51,12 +51,12 @@ class Location extends Component {
             value={this.state.location}
             placeholder={"Address, City, Zip, or Point of Interest..."}
             onChange={(event) => this.handleLocationChange(event)}
-            style={{maxWidth: '61%', minWidth: '61%'}}
+            style={{maxWidth: '61%', minWidth: '61%', margin: '.5vw'}}
             >
           </input>
           <button
             onClick={(event) => this.getLocation(event)}
-            style={{maxWidth: '30%', minWidth: '30%'}}
+            style={{maxWidth: '30%', minWidth: '30%', margin: '.5vw'}}
             >{"Set Your Location"}
           </button>
         </form>
