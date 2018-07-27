@@ -1,7 +1,11 @@
+const algoliasearchHelper = require('algoliasearch-helper')
+const algoliasearch = require('algoliasearch')
 const FS = require('fs')
 const restaurantsListJson = require('./dataset/restaurants_list.json')
 const restaurantsInfoJson = csvToJSON()
 const combinedRestaurantJSON = combineData(restaurantsInfoJson, restaurantsListJson)
+const APP_ID = 'ZPSJDZC155'
+const indexName = 'open_table_restaurants'
 
 function csvToJSON(file='src/resources/dataset/restaurants_info.csv') {
   const text = FS.readFileSync(file, 'utf8', (err, data) => {
@@ -56,10 +60,20 @@ function combineData(restaurantInfo, restaurantList) {
   })
 }
 
-// once the data from the CSV is parsed into JSON and combined with the existing JSON data
-// we write the combined JSON to a new JSON file to use as our index's dataset
-FS.writeFile('src/resources/dataset/combined_restaurant_data_fixed.json', JSON.stringify(combinedRestaurantJSON), 'utf8', (err) => {
-  if (err) {
-    console.log(err)
-  }
-})
+function indexData(jsonData, appId, indexName) {
+  fetch('https://restaurant-locator-server.herokuapp.com/auth/generate')
+    .then(resp => resp.json())
+    .then(json => {
+      const client = algoliasearch(appId, json['secure_key'])
+      const index = client.initIndex(indexName)
+      index.addObjects(jsonData, (err, content) => {
+        if(err) {
+          console.log(err, "Content Not Added")
+        } else {
+          console.log(content,"Contents added to index successfully!")
+        }
+      })
+    })
+}
+
+indexData(combinedRestaurantJSON, APP_ID, indexName)

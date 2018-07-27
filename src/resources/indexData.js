@@ -1,9 +1,9 @@
-import algoliasearchHelper from 'algoliasearch-helper'
-import algoliasearch from 'algoliasearch'
-const combinedRestaurantJSON = require('./dataset/combined_restaurant_data_fixed.json')
-const APP_ID = 'ZPSJDZC155'
-const indexName = 'open_table_restaurants'
-
+// import algoliasearchHelper from 'algoliasearch-helper'
+// import algoliasearch from 'algoliasearch'
+// const combinedRestaurantJSON = require('./dataset/combined_restaurant_data_fixed.json')
+// const APP_ID = 'ZPSJDZC155'
+// const indexName = 'open_table_restaurants'
+//
 // function indexData(jsonData, appId, indexName) {
 //   fetch('https://restaurant-locator-server.herokuapp.com/auth/generate')
 //     .then(resp => resp.json())

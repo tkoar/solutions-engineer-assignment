@@ -32,6 +32,7 @@ class ResultsList extends Component {
     if (this.props.searchCount) {
       return(
         <div className="result-stats">
+          <span><img src='favicon.ico' alt='Algolia' className="algolia-logo"></img></span>
           <span className="search-count">{`${this.props.searchCount} results found `}</span>
           <span className="search-time">{` in ${this.props.searchTime/1000} seconds.`}</span>
         </div>
